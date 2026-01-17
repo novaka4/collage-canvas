@@ -8,19 +8,23 @@ export const useVideoCollage = () => {
   const [isExporting, setIsExporting] = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  const addVideo = useCallback((file: File) => {
+  const addVideo = useCallback((file: File, dropX?: number, dropY?: number) => {
     const url = URL.createObjectURL(file);
     const id = `video-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     
     const canvasWidth = canvasRef.current?.offsetWidth || 800;
     const canvasHeight = canvasRef.current?.offsetHeight || 450;
     
+    // Use drop position if provided, otherwise random
+    const x = dropX !== undefined ? Math.max(0, Math.min(dropX - 150, canvasWidth - 300)) : Math.random() * (canvasWidth - 300);
+    const y = dropY !== undefined ? Math.max(0, Math.min(dropY - 100, canvasHeight - 200)) : Math.random() * (canvasHeight - 200);
+    
     const newVideo: VideoItem = {
       id,
       src: url,
       name: file.name,
-      x: Math.random() * (canvasWidth - 300),
-      y: Math.random() * (canvasHeight - 200),
+      x,
+      y,
       width: 300,
       height: 200,
     };
