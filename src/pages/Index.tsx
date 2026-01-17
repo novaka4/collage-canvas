@@ -49,6 +49,7 @@ const Index = () => {
           onMoveVideo={moveVideo}
           onResizeVideo={resizeVideo}
           onDeleteVideo={deleteVideo}
+          onAddVideo={addVideo}
           canvasRef={canvasRef as React.RefObject<HTMLDivElement>}
         />
       </div>
