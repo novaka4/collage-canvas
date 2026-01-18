@@ -21,15 +21,12 @@ const Index = () => {
   } = useVideoCollage();
 
   return (
-    <div className="min-h-screen bg-background p-6 flex flex-col">
-      <header className="flex items-center gap-3 mb-6">
-        <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center">
-          <Film className="w-5 h-5 text-primary" />
+    <div className="h-screen bg-background p-4 flex flex-col overflow-hidden">
+      <header className="flex items-center gap-3 mb-3 shrink-0">
+        <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
+          <Film className="w-4 h-4 text-primary" />
         </div>
-        <div>
-          <h1 className="text-xl font-semibold text-foreground">Video Collage Editor</h1>
-          <p className="text-sm text-muted-foreground">Drag, resize, and export your video mashups</p>
-        </div>
+        <h1 className="text-lg font-semibold text-foreground">Video Collage Editor</h1>
       </header>
 
       <Toolbar
@@ -41,7 +38,7 @@ const Index = () => {
         isExporting={isExporting}
       />
 
-      <div className="flex-1 mt-4 min-h-0">
+      <div className="flex-1 mt-2 min-h-0">
         <Canvas
           videos={videos}
           selectedId={selectedId}
@@ -54,9 +51,9 @@ const Index = () => {
         />
       </div>
 
-      <footer className="mt-4 text-center">
+      <footer className="mt-2 text-center shrink-0">
         <p className="text-xs text-muted-foreground">
-          Tip: Click a video to select, drag to move, use corners to resize. Export creates a 10-second WebM video.
+          Click to select, drag to move, corners to resize. Export at {Math.round(window.innerWidth)}x{Math.round(window.innerHeight - 150)}px
         </p>
       </footer>
     </div>

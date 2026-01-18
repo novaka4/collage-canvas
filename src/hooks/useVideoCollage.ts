@@ -110,11 +110,15 @@ export const useVideoCollage = () => {
       const canvas = document.createElement('canvas');
       const ctx = canvas.getContext('2d')!;
       
-      canvas.width = 1920;
-      canvas.height = 1080;
+      // Use actual canvas dimensions for 1:1 quality
+      const exportWidth = canvasRef.current.offsetWidth;
+      const exportHeight = canvasRef.current.offsetHeight;
+      
+      canvas.width = exportWidth;
+      canvas.height = exportHeight;
 
-      const scaleX = 1920 / canvasRef.current.offsetWidth;
-      const scaleY = 1080 / canvasRef.current.offsetHeight;
+      const scaleX = 1;
+      const scaleY = 1;
 
       // Get all video elements
       const videoElements = canvasRef.current.querySelectorAll('video');
@@ -127,11 +131,11 @@ export const useVideoCollage = () => {
         }
       });
 
-      // Record using MediaRecorder
-      const stream = canvas.captureStream(30);
+      // Record using MediaRecorder with high quality settings
+      const stream = canvas.captureStream(60);
       const mediaRecorder = new MediaRecorder(stream, {
         mimeType: 'video/webm;codecs=vp9',
-        videoBitsPerSecond: 5000000,
+        videoBitsPerSecond: 50000000, // 50 Mbps for high quality
       });
 
       const chunks: Blob[] = [];

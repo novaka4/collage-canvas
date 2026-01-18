@@ -81,7 +81,7 @@ const Canvas: React.FC<CanvasProps> = ({
   return (
     <div
       ref={canvasRef}
-      className={`canvas-container w-full aspect-video rounded-lg border transition-colors ${
+      className={`canvas-container w-full h-full rounded-lg border transition-colors ${
         isDragOver ? 'border-primary border-2 bg-primary/5' : 'border-border'
       }`}
       onClick={handleCanvasClick}
