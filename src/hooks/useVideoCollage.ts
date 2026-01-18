@@ -199,9 +199,29 @@ export const useVideoCollage = () => {
         ctx.fillStyle = '#0d0f12';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        videoData.forEach(({ el, video }) => {
+        // Sort by zIndex for correct layering
+        const sortedVideoData = [...videoData].sort((a, b) => a.video.zIndex - b.video.zIndex);
+
+        sortedVideoData.forEach(({ el, video }) => {
+          // Implement object-cover behavior to match preview
+          const videoAspect = el.videoWidth / el.videoHeight;
+          const containerAspect = video.width / video.height;
+          
+          let sx = 0, sy = 0, sw = el.videoWidth, sh = el.videoHeight;
+          
+          if (videoAspect > containerAspect) {
+            // Video is wider - crop sides
+            sw = el.videoHeight * containerAspect;
+            sx = (el.videoWidth - sw) / 2;
+          } else {
+            // Video is taller - crop top/bottom
+            sh = el.videoWidth / containerAspect;
+            sy = (el.videoHeight - sh) / 2;
+          }
+          
           ctx.drawImage(
             el,
+            sx, sy, sw, sh,  // Source rectangle (cropped)
             video.x * scaleX,
             video.y * scaleY,
             video.width * scaleX,
