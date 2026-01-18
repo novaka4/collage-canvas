@@ -10,6 +10,8 @@ interface CanvasProps {
   onResizeVideo: (id: string, width: number, height: number, x: number, y: number) => void;
   onDeleteVideo: (id: string) => void;
   onAddVideo: (file: File, dropX?: number, dropY?: number) => void;
+  onBringToFront: (id: string) => void;
+  onSendToBack: (id: string) => void;
   canvasRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -21,6 +23,8 @@ const Canvas: React.FC<CanvasProps> = ({
   onResizeVideo,
   onDeleteVideo,
   onAddVideo,
+  onBringToFront,
+  onSendToBack,
   canvasRef,
 }) => {
   const [isDragOver, setIsDragOver] = useState(false);
@@ -105,6 +109,8 @@ const Canvas: React.FC<CanvasProps> = ({
           onMove={onMoveVideo}
           onResize={onResizeVideo}
           onDelete={onDeleteVideo}
+          onBringToFront={onBringToFront}
+          onSendToBack={onSendToBack}
           canvasRect={canvasRect}
         />
       ))}

@@ -6,6 +6,7 @@ export interface VideoItem {
   y: number;
   width: number;
   height: number;
+  zIndex: number;
 }
 
 export type ResizeHandle = 'nw' | 'ne' | 'sw' | 'se';

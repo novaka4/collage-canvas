@@ -15,6 +15,8 @@ const Index = () => {
     resizeVideo,
     deleteVideo,
     clearAll,
+    bringToFront,
+    sendToBack,
     autoArrange,
     exportCollage,
     setSelectedId,
@@ -47,6 +49,8 @@ const Index = () => {
           onResizeVideo={resizeVideo}
           onDeleteVideo={deleteVideo}
           onAddVideo={addVideo}
+          onBringToFront={bringToFront}
+          onSendToBack={sendToBack}
           canvasRef={canvasRef as React.RefObject<HTMLDivElement>}
         />
       </div>

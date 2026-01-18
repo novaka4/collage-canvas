@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { VideoItem, ResizeHandle } from '@/types/video';
-import { X } from 'lucide-react';
+import { X, ArrowUp, ArrowDown } from 'lucide-react';
 
 interface VideoElementProps {
   video: VideoItem;
@@ -9,6 +9,8 @@ interface VideoElementProps {
   onMove: (id: string, x: number, y: number) => void;
   onResize: (id: string, width: number, height: number, x: number, y: number) => void;
   onDelete: (id: string) => void;
+  onBringToFront: (id: string) => void;
+  onSendToBack: (id: string) => void;
   canvasRect: DOMRect | null;
 }
 
@@ -19,6 +21,8 @@ const VideoElement: React.FC<VideoElementProps> = ({
   onMove,
   onResize,
   onDelete,
+  onBringToFront,
+  onSendToBack,
   canvasRect,
 }) => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -131,6 +135,7 @@ const VideoElement: React.FC<VideoElementProps> = ({
         top: video.y,
         width: video.width,
         height: video.height,
+        zIndex: video.zIndex,
       }}
       onMouseDown={handleMouseDown}
     >
@@ -154,6 +159,30 @@ const VideoElement: React.FC<VideoElementProps> = ({
           >
             <X size={14} />
           </button>
+          
+          {/* Layer controls */}
+          <div className="absolute -top-3 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+            <button
+              className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-transform"
+              onClick={(e) => {
+                e.stopPropagation();
+                onBringToFront(video.id);
+              }}
+              title="Bring to front"
+            >
+              <ArrowUp size={14} />
+            </button>
+            <button
+              className="w-6 h-6 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-transform"
+              onClick={(e) => {
+                e.stopPropagation();
+                onSendToBack(video.id);
+              }}
+              title="Send to back"
+            >
+              <ArrowDown size={14} />
+            </button>
+          </div>
           
           <div className="resize-handle corner-nw" onMouseDown={(e) => handleResizeStart(e, 'nw')} />
           <div className="resize-handle corner-ne" onMouseDown={(e) => handleResizeStart(e, 'ne')} />

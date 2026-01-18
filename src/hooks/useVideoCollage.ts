@@ -19,17 +19,20 @@ export const useVideoCollage = () => {
     const x = dropX !== undefined ? Math.max(0, Math.min(dropX - 150, canvasWidth - 300)) : Math.random() * (canvasWidth - 300);
     const y = dropY !== undefined ? Math.max(0, Math.min(dropY - 100, canvasHeight - 200)) : Math.random() * (canvasHeight - 200);
     
-    const newVideo: VideoItem = {
-      id,
-      src: url,
-      name: file.name,
-      x,
-      y,
-      width: 300,
-      height: 200,
-    };
-
-    setVideos((prev) => [...prev, newVideo]);
+    setVideos((prev) => {
+      const maxZ = prev.length > 0 ? Math.max(...prev.map(v => v.zIndex)) : 0;
+      const newVideo: VideoItem = {
+        id,
+        src: url,
+        name: file.name,
+        x,
+        y,
+        width: 300,
+        height: 200,
+        zIndex: maxZ + 1,
+      };
+      return [...prev, newVideo];
+    });
     setSelectedId(id);
     toast.success(`Added "${file.name}"`);
   }, []);
@@ -67,6 +70,20 @@ export const useVideoCollage = () => {
     toast.success('All videos cleared');
   }, [videos]);
 
+  const bringToFront = useCallback((id: string) => {
+    setVideos((prev) => {
+      const maxZ = Math.max(...prev.map(v => v.zIndex));
+      return prev.map(v => v.id === id ? { ...v, zIndex: maxZ + 1 } : v);
+    });
+  }, []);
+
+  const sendToBack = useCallback((id: string) => {
+    setVideos((prev) => {
+      const minZ = Math.min(...prev.map(v => v.zIndex));
+      return prev.map(v => v.id === id ? { ...v, zIndex: minZ - 1 } : v);
+    });
+  }, []);
+
   const autoArrange = useCallback(() => {
     if (!canvasRef.current || videos.length === 0) return;
 
@@ -93,6 +110,7 @@ export const useVideoCollage = () => {
           y: row * cellHeight + padding,
           width: cellWidth - padding * 2,
           height: cellHeight - padding * 2,
+          zIndex: index,
         };
       })
     );
@@ -212,6 +230,8 @@ export const useVideoCollage = () => {
     resizeVideo,
     deleteVideo,
     clearAll,
+    bringToFront,
+    sendToBack,
     autoArrange,
     exportCollage,
     setSelectedId,
