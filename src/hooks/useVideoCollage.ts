@@ -149,6 +149,12 @@ export const useVideoCollage = () => {
         }
       });
 
+      // Find the longest video duration
+      const maxDuration = Math.max(...videoData.map(({ el }) => el.duration || 0));
+      const duration = Math.max(1, maxDuration) * 1000; // Convert to ms, minimum 1 second
+      
+      toast.info(`Exporting ${Math.round(maxDuration)}s video...`);
+
       // Record using MediaRecorder with high quality settings
       const stream = canvas.captureStream(60);
       const mediaRecorder = new MediaRecorder(stream, {
@@ -175,16 +181,16 @@ export const useVideoCollage = () => {
         toast.success('Export complete! Video downloaded.');
       };
 
-      // Reset videos to start
+      // Reset videos to start and enable looping
       videoData.forEach(({ el }) => {
         el.currentTime = 0;
+        el.loop = true;
         el.play();
       });
 
       mediaRecorder.start();
 
-      // Record frames for 10 seconds
-      const duration = 10000;
+      // Record frames for the duration of the longest video
       const frameRate = 30;
       const frameInterval = 1000 / frameRate;
       let elapsed = 0;
